@@ -10,12 +10,29 @@ from sklearn import metrics
 from textblob import TextBlob, Word
 from nltk.stem.snowball import SnowballStemmer
 
+# redis store dependencies
+import redis
+import pickle
+
 # Web App Requirements
 from django.template import loader
 from django.http import HttpResponse
 
-
 def index(request):
+    context = {}
+    # use Naive Bayes model from Redis  to predict the truth rating
+    redis_server = redis.StrictRedis(host="localhost", port=6379, db=0)
+    nb = pickle.loads(redis_server.get("model_nb"))
+    vect = pickle.loads(redis_server.get("model_vect"))
+
+    test_test_dtm = vect.transform(['Top 10 hot chicks to see right now'])
+    context['accuracy'] = str(nb.predict(test_test_dtm))
+
+    template = loader.get_template('clickorbait/basis.html')
+
+    return HttpResponse(template.render(context, request))
+
+def index2(request):
     # read clickbait.csv into a DataFrame
     # documentation: http://pandas.pydata.org/pandas-docs/stable/generated/pandas.read_csv.html
     url = 'clickorbait/data/clickbait.csv'
@@ -44,10 +61,6 @@ def index(request):
     # rows are documents, columns are terms (aka "tokens" or "features")
     context['training_shape'] = "%s" % (X_train_dtm.shape,)
     context['features_sample'] = '[%s]' % ', '.join(map(str, vect.get_feature_names()[-50:]))
-
-    # create document-term matrices
-    X_train_dtm = vect.fit_transform(X_train)
-    X_test_dtm = vect.transform(X_test)
 
     # use Naive Bayes to predict the truth rating
     nb = MultinomialNB()
