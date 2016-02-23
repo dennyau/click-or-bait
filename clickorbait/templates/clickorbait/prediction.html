@@ -1,0 +1,16 @@
+{% if query_answers %}
+{% for answer in query_answers %}
+{% if answer == 1 %}
+{%     set card_colour = "green darken-1" %}
+{%     set text_colour = "white-text" %}
+{%     set answer_text = "Yeah! Get that sweet knowledge!" %}
+{% elif answer == 0 %}
+{%     set card_colour = "red lighten-1" %}
+{%     set text_colour = "black-text" %}
+{%     set answer_text = "Whoa there.  It's a trap." %}
+{% endif %}
+<div class="card-panel center hoverable {{ card_colour }}">
+    <h3 class="{{ text_colour }}">{{ answer_text }}</h3>
+</div>
+{% endfor %}
+{% endif %}

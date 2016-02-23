@@ -19,6 +19,24 @@ from django.template import loader
 from django.http import HttpResponse
 import sys
 
+def predict(request):
+    context = {}
+    query_title = request.POST.get('query-title', '')
+    if (query_title):
+        # use Naive Bayes model from Redis  to predict the truth rating
+        redis_server = redis.StrictRedis(host="localhost", port=6379, db=0)
+        nb = pickle.loads(redis_server.get("model_nb"))
+        vect = pickle.loads(redis_server.get("model_vect"))
+
+        test_test_dtm = vect.transform([query_title])
+        q_a = nb.predict(test_test_dtm).tolist()
+        #print >>sys.stderr, q_a
+        context['query_answers'] = q_a
+
+    template = loader.get_template('clickorbait/prediction.html')
+
+    return HttpResponse(template.render(context, request))
+
 def index(request):
     context = {}
 
