@@ -64,8 +64,16 @@ class Command(BaseCommand):
         nb = MultinomialNB()
         nb.fit(X_train_dtm, y_train)
 
+        # calculate accuracy
+        y_pred_class = nb.predict(X_test_dtm)
+        model_accuracy = str(metrics.accuracy_score(y_test, y_pred_class))
+
+        # calculate null accuracy
+        y_test_binary = np.where(y_test==5, 1, 0)
+        model_null_accuracy = str(max(y_test_binary.mean(), 1 - y_test_binary.mean()))
+
         # Store the Pandas Dataframe for later use
-        with open('clickbait_dataframe.pickle', 'wb') as handle:
+        with open('dataframe_pandas.pickle', 'wb') as handle:
             pickle.dump(clickbait, handle)
         redis_server.set("clickbait_dataframe", pickle.dumps(clickbait))
 
@@ -78,6 +86,10 @@ class Command(BaseCommand):
         with open('naive_bayes.pickle', 'wb') as handle:
             pickle.dump(nb, handle)
         redis_server.set("model_nb", pickle.dumps(nb))
+
+        # Store the Model Accuracy and Null Accuracy
+        redis_server.set("model_accuracy",model_accuracy);
+        redis_server.set("model_null_accuracy",model_null_accuracy);
 
 
         self.stdout.write(self.style.SUCCESS('Successfully stored models and dataframes'))
