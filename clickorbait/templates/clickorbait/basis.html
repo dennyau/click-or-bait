@@ -15,20 +15,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
 <body>
-<nav class="light-blue lighten-1" role="navigation">
+<div class="navbar-fixed">
+  <nav class="light-blue lighten-1" role="navigation">
     <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">DAT 10 GA Final Project</a>
-        <ul class="right hide-on-med-and-down">
-            <li><a href="#footer">Navbar Link</a></li>
-            <li><a href="#footer">Navbar Link 2</a></li>
-        </ul>
+      <ul class="right hide-on-med-and-down">
+        <li><a href="#index-banner">Try me!</a></li>
+        <li><a href="#topic-details">Topic Details</a></li>
+      </ul>
 
-        <ul id="nav-mobile" class="side-nav">
-            <li><a href="#footer">Mobile Navbar Link</a></li>
-            <li><a href="#footer">Mobile Navbar Link 2</a></li>
-        </ul>
-        <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+      <ul id="nav-mobile" class="side-nav">
+        <li><a href="#index-banner">Try me!</a></li>
+        <li><a href="#topic-details">Topic Details</a></li>
+      </ul>
+      <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
     </div>
-</nav>
+  </nav>
+</div>
 
 <div class="section no-pad-bot" id="index-banner">
     <div class="container">
@@ -116,7 +118,7 @@
       <div class="row center init-hidden" id="topic-details">
         <h3>Model Topics</h3>
         <div class="col m6">
-          <table class="striped responsive-table">
+          <table class="striped">
             <thead><tr>
               <th data-field="word">Word</th>
               <th data-field="score">Score</th>
@@ -132,7 +134,7 @@
           </table>
         </div>
         <div class="col m6">
-          <table class="striped responsive-table">
+          <table class="striped">
             <thead><tr>
               <th data-field="word">Word</th>
               <th data-field="score">Score</th>

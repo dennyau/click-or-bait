@@ -8,9 +8,6 @@
         var targetDiv = $(targetId);
         var targetUrl = $(targetForm).attr('action');
 
-        // Pin the form
-        //$('#index-banner').pushpin();
-
         // Takeover submit event
         $(targetForm).bind('submit', function(){
             predict();
