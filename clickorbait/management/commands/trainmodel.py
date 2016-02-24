@@ -9,6 +9,8 @@ from sklearn.linear_model import LogisticRegression
 from sklearn import metrics
 from textblob import TextBlob, Word
 from nltk.stem.snowball import SnowballStemmer
+from gensim import corpora, models, similarities
+from collections import defaultdict
 
 # redis store dependencies
 import redis
@@ -94,5 +96,27 @@ class Command(BaseCommand):
         # Store the training data rowcount and feature count
         redis_server.set("num_documents",X_train_dtm.shape[0])
         redis_server.set("num_features",X_train_dtm.shape[1])
+
+        # Gensim LDA creates two categories - hopefully one for truth and one for spam/clickbat/falsehood
+        # Filter out bad words in the data
+        stoplist = set(CountVectorizer(stop_words='english').get_stop_words() )
+        texts = [[word for word in document.lower().split() if word not in stoplist] for document in list(X)]
+
+        # count up the frequency of each word
+        frequency = defaultdict(int)
+        for text in texts:
+             for token in text:
+                 frequency[token] += 1
+
+        # remove words that only occur a small number of times
+        texts = [[token for token in text if frequency[token] > 1] for text in texts]
+        dictionary = corpora.Dictionary(texts)
+        corpus = [dictionary.doc2bow(text) for text in texts]
+
+        # create the two categories in the LDA and store it in redis
+        lda = models.LdaModel(corpus, id2word=dictionary, num_topics=2, alpha = 'auto')
+        with open('lda_two_cat.pickle', 'wb') as handle:
+            pickle.dump(lda, handle)
+        redis_server.set("model_lda", pickle.dumps(lda))
 
         self.stdout.write(self.style.SUCCESS('Successfully stored models and dataframes'))

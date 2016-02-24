@@ -51,11 +51,6 @@
   <div class="container">
     <div class="section">
       <!-- tl;dr Section -->
-      <!--
-      <div id="prediction-results" class="row center progress" style="opacity: 0;">
-        <div class="indeterminate"></div>
-      </div>
-      -->
       <div id="prediction-results" class="row center"></div>
 
       <!-- Infographical part -->
@@ -75,7 +70,35 @@
           </div>
         </div>
 
-        <div id="top-words" class="col m12" style="opacity: 0">
+      <!--   Icon Section   -->
+      <div class="row init-hidden" id="model-details">
+        <div class="col s12 m4">
+          <div class="icon-block">
+            <h2 class="center light-blue-text"><i class="material-icons">flash_on</i></h2>
+            <h5 class="center">Accuracy</h5>
+            <p class="center light">{{ accuracy }}</p>
+          </div>
+        </div>
+
+        <div class="col s12 m4">
+          <div class="icon-block center">
+            <h2 class="light-blue-text"><i class="material-icons">group</i></h2>
+            <h5>Training Data</h5>
+            <p class="light">{{ num_documents }} documents</p>
+            <p class="light">{{ num_features }} features</p>
+          </div>
+        </div>
+
+        <div class="col s12 m4">
+          <div class="icon-block">
+            <h2 class="center light-blue-text"><i class="material-icons">settings</i></h2>
+            <h5 class="center">Null Accuracy</h5>
+            <p class="center light">{{ null_accuracy }}</p>
+          </div>
+        </div>
+      </div>
+
+        <div id="top-words" class="col m12 init-hidden">
         <h3>Sample Training Top Words</h3>
         <p><i class="material-icons">textsms</i> {{ top_words_title }}</p>
         <ul>
@@ -89,32 +112,40 @@
 
       </div>
 
-      <!--   Icon Section   -->
-      <div class="row">
-        <div class="col s12 m4">
-          <div class="icon-block">
-            <h2 class="center light-blue-text"><i class="material-icons">flash_on</i></h2>
-            <h5 class="center">Accuracy</h5>
-            <p class="center light">{{ accuracy }}</p>
-          </div>
+      <!-- two column -->
+      <div class="row center init-hidden" id="topic-details">
+        <h3>Model Topics</h3>
+        <div class="col m6">
+          <table class="striped responsive-table">
+            <thead><tr>
+              <th data-field="word">Word</th>
+              <th data-field="score">Score</th>
+            </tr></thead>
+            <tbody>
+              {% for (score,word) in lda_topic_0 %}
+              <tr>
+                <td>{{ word }}</td>
+                <td>{{ score }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
         </div>
-
-        <div class="col s12 m4">
-          <div class="icon-block center">
-            <h2 class="light-blue-text"><i class="material-icons">group</i></h2>
-            <h5>Training Data</h5>
-
-            <p class="light">{{ num_documents }} documents</p>
-            <p class="light">{{ num_features }} features</p>
-          </div>
-        </div>
-
-        <div class="col s12 m4">
-          <div class="icon-block">
-            <h2 class="center light-blue-text"><i class="material-icons">settings</i></h2>
-            <h5 class="center">Null Accuracy</h5>
-            <p class="center light">{{ null_accuracy }}</p>
-          </div>
+        <div class="col m6">
+          <table class="striped responsive-table">
+            <thead><tr>
+              <th data-field="word">Word</th>
+              <th data-field="score">Score</th>
+            </tr></thead>
+            <tbody>
+              {% for (score,word) in lda_topic_0 %}
+              <tr>
+                <td>{{ word }}</td>
+                <td>{{ score }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
         </div>
       </div>
 

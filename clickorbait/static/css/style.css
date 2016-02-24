@@ -12,3 +12,12 @@
 .icon-block .material-icons {
 	font-size: inherit;
 }
+.init-hidden {
+    opacity: 0;
+}
+nav {
+    position: fixed;
+}
+#index-banner {
+    padding-top: 50px;
+}

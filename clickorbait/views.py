@@ -82,6 +82,9 @@ def index(request):
     context['num_documents'] = redis_server.get("num_documents")
     context['num_features']  = redis_server.get("num_features")
 
+    # fetch LDA from redis
+    lda = pickle.loads(redis_server.get("model_lda"))
+
     # choose a random title that is at least 50 characters
     linkTitle_length = 0
     while linkTitle_length < 50:
@@ -100,6 +103,10 @@ def index(request):
     context['top_words_title'] = linkTitle_text;
     top_scores = sorted(word_scores.items(), key=lambda x: x[1], reverse=True)[:5]
     context['top_scores'] = top_scores
+
+    # Use LDA to show the top words associated with our two categories
+    context['lda_topic_0'] = lda.show_topic(0)
+    context['lda_topic_1'] = lda.show_topic(1)
 
     template = loader.get_template('clickorbait/basis.html')
     return HttpResponse(template.render(context, request))

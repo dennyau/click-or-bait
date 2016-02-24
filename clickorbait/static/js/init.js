@@ -8,6 +8,9 @@
         var targetDiv = $(targetId);
         var targetUrl = $(targetForm).attr('action');
 
+        // Pin the form
+        //$('#index-banner').pushpin();
+
         // Takeover submit event
         $(targetForm).bind('submit', function(){
             predict();
@@ -47,8 +50,11 @@
         });
 
         // Set up ScrollFire
+        var go = 200;
         var options = [
-            {selector: '#top-words', offset: 400, callback: 'Materialize.fadeInImage("#top-words")' },
+            {selector: '#top-words', offset: go, callback: 'Materialize.fadeInImage("#top-words")' },
+            {selector: '#model-details', offset: go, callback: 'Materialize.fadeInImage("#model-details")' },
+            {selector: '#topic-details', offset: go, callback: 'Materialize.fadeInImage("#topic-details")' },
         ];
         Materialize.scrollFire(options);
     }); // end of document ready
