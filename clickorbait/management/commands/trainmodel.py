@@ -36,8 +36,16 @@ class Command(BaseCommand):
         # convert label to a numeric variable
         clickbait['truth'] = clickbait.classification.map({'Fake':0, 'Truth':1})
 
-        context = {}
-        context['sample_table'] = clickbait.head().to_html()
+        # add sentiment analysis
+        # define a function that accepts text and returns the polarity
+        def detect_sentiment(text):
+            return TextBlob(text.decode('utf-8')).sentiment.polarity
+
+        # create a new DataFrame column for sentiment (WARNING: SLOW!)
+        clickbait['sentiment'] = clickbait.title.apply(detect_sentiment)
+
+        #context = {}
+        #context['sample_table'] = clickbait.head().to_html()
 
         # define X and y
         X = clickbait.title
@@ -56,6 +64,11 @@ class Command(BaseCommand):
         nb = MultinomialNB()
         nb.fit(X_train_dtm, y_train)
 
+        # Store the Pandas Dataframe for later use
+        with open('clickbait_dataframe.pickle', 'wb') as handle:
+            pickle.dump(clickbait, handle)
+        redis_server.set("clickbait_dataframe", pickle.dumps(clickbait))
+
         # Store the CountVectorizer for later use
         with open('count_vectorizer.pickle', 'wb') as handle:
             pickle.dump(vect, handle)
@@ -67,4 +80,4 @@ class Command(BaseCommand):
         redis_server.set("model_nb", pickle.dumps(nb))
 
 
-        self.stdout.write(self.style.SUCCESS('Successfully and stored models'))
+        self.stdout.write(self.style.SUCCESS('Successfully stored models and dataframes'))
