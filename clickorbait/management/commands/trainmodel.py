@@ -88,8 +88,11 @@ class Command(BaseCommand):
         redis_server.set("model_nb", pickle.dumps(nb))
 
         # Store the Model Accuracy and Null Accuracy
-        redis_server.set("model_accuracy",model_accuracy);
-        redis_server.set("model_null_accuracy",model_null_accuracy);
+        redis_server.set("model_accuracy",model_accuracy)
+        redis_server.set("model_null_accuracy",model_null_accuracy)
 
+        # Store the training data rowcount and feature count
+        redis_server.set("num_documents",X_train_dtm.shape[0])
+        redis_server.set("num_features",X_train_dtm.shape[1])
 
         self.stdout.write(self.style.SUCCESS('Successfully stored models and dataframes'))

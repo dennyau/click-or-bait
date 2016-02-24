@@ -78,6 +78,10 @@ def index(request):
     context['accuracy'] = redis_server.get('model_accuracy')
     context['null_accuracy'] = redis_server.get('model_null_accuracy')
 
+    # fetch training details from redis
+    context['num_documents'] = redis_server.get("num_documents")
+    context['num_features']  = redis_server.get("num_features")
+
     # choose a random title that is at least 50 characters
     linkTitle_length = 0
     while linkTitle_length < 50:
