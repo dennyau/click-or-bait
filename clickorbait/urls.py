@@ -21,4 +21,5 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.index, name='index'),
     url(r'^prediction/$', views.predict, name='predict'),
+    url(r'^sentiment-boxplot/$', views.sentiment_boxplot, name='sentiment_boxplot'),
 ]

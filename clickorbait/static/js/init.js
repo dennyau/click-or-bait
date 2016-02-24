@@ -34,5 +34,22 @@
                 }
             });
         }
+
+        // Get Boxplot
+        $.ajax({
+            method: 'GET',
+            url: '/sentiment-boxplot/',
+            success: function(html) {
+                $( "#sentiment-boxplot" ).empty();
+                Materialize.fadeInImage("#sentiment-boxplot");
+                $( "#sentiment-boxplot" ).append( html );
+            }
+        });
+
+        // Set up ScrollFire
+        var options = [
+            {selector: '#top-words', offset: 400, callback: 'Materialize.fadeInImage("#top-words")' },
+        ];
+        Materialize.scrollFire(options);
     }); // end of document ready
 })(jQuery); // end of jQuery name space
